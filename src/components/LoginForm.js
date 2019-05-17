@@ -12,86 +12,48 @@ class LoginForm extends React.Component {
 
   validateName = (event) => {
     if (event !== undefined) {
-      let nameValid = false
-      // event.preventDefault()
       this.setState({
         username: event.target.value
-      }, () => {
-          console.log("before callback", nameValid, this.state.username.length)
-          this.setState({
-            nameValid: this.state.username.length > 0 ? nameValid = true : nameValid
-          })
-        })
+      })
     }
   }
 
   validatePassword = (event) => {
     if (event !== undefined) {
-      let passwordValid = false
-      // event.preventDefault()
       this.setState({
         password: event.target.value
-      }, () => {
-          console.log("before callback", passwordValid, this.state.password.length)
-          this.setState({
-            passwordValid: this.state.password.length > 0 ? passwordValid = true : passwordValid
-          })
-        })
-    }
-  }
-
-  canSubmit = () => {
-    console.log("Name: " + this.state.nameValid + " and Password: " + this.state.passwordValid)
-    if (this.state.nameValid && this.state.passwordValid){
-      return <button type="submit">Log in</button>
-    } else {
-      return <p>All fields must be filled before submission</p>
+      })
     }
   }
 
   handleSubmit =(event) => {
     event.preventDefault()
-    let username = event.target.elements['username'].value
-    let password = event.target.elements['password'].value          
     
     //callback function that is used in App - passing in an object
-    this.props.handleLogin({
-      [event.target.elements['username'].name]:username, 
-      [event.target.elements['password'].name]:password
-      })
+    if (this.state.username.length > 0 && this.state.password.length > 0) {
+      this.props.handleLogin(this.state)
+    }
 
   }
 
   render() {
     return (
-      <form onSubmit={(event) => {
-        console.log(event)
-        event.preventDefault()
-          let username = event.target.elements['username'].value
-          let password = event.target.elements['password'].value          
-          
-          //callback function that is used in App - passing in an object
-          this.props.handleLogin({
-            [event.target.elements['username'].name]:username, 
-            [event.target.elements['password'].name]:password
-            })
-          }
-      }>
-      {/* <form onSubmit={this.handleSubmit}> */}
+      <form id="login-form" onSubmit={this.handleSubmit}>
         <div>
           <label>
             Username
-            <input id="username" name="username" type="text" value={this.state.username} onChange={this.validateName}/>
+            <input id="username" name="username" type="text" value={this.state.username} onChange={this.validateName} required={true}/>
           </label>
         </div>
         <div>
           <label>
             Password
-            <input id="password" name="password" type="password" value={this.state.password} onChange={this.validatePassword}/>
+            <input id="password" name="password" type="password" value={this.state.password} onChange={this.validatePassword} required={true}/>
           </label>
         </div>
         <div>
-          {this.canSubmit()}
+        <button type="submit">Log in</button>
+          {/* {this.canSubmit()} */}
         </div>
       </form>
     );
